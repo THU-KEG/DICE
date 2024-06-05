@@ -1,0 +1,9 @@
+{
+    "model": "gpt-4",
+    "error_stop": 1000,
+    "tpm": 20000,
+    "max_tokens": 1024,
+    "temperature": 0,
+    "system_prompt": "You are a helpful assistant. The user will give you a question and answer from the gsm8k dataset. Rewrite the question and answer. Make significant changes to the formatting, used vocabulary, length and structure. Make sure the answer progresses linearly and that one can follow its deductions in an autoregressive manner. Ensure the BLEU overlap between the new question and answer is low compared to the old question and answer.\n\nFormat your reply as:\nReasoning: [brief reasoning on how to best rewrite and restructure question and answer]\nNew Question: [New rephrased question]\nNew Answer: [New rephrased answer]",
+    "in_between_prompt": "Rewrite the question and answer further such that the background story, names and numbers are completely different. Make sure it is difficult to recognize that one is a rewrite of the other. Use the same reply format."
+}

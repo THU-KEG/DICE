@@ -1,0 +1,35 @@
+{
+    "output_dir": "../logs",
+    "num_train_epochs": 8,
+    "per_device_train_batch_size": 2,
+    "per_device_eval_batch_size": 4,
+    "gradient_accumulation_steps": 8,
+    "warmup_ratio": 0.0,
+    "weight_decay": 0.0,
+    "logging_dir": "logs",
+    "logging_steps": 1000,
+    "learning_rate": 7e-5,
+    "save_steps": 10000000000,
+    "save_total_limit": 2,
+    "max_length_default": 1024,
+    "eval_steps": 1000000000,
+    "reload": false,
+    "test_split_size": 0.0,
+    "fp16": false,
+    "bf16": true,
+    "use_deepspeed": false,
+    "use_lora": false,
+    "deepspeed_config_file": "configs/ds_config_finetune.json",
+    "lora_config": {
+      "peft_type": "LORA",
+      "task_type": "CAUSAL_LM",
+      "inference_mode": false,
+      "fan_in_fan_out": false,
+      "r": 64,
+      "lora_alpha": 64,
+      "lora_dropout": 0.1,
+      "bias": "none",
+      "target_modules": ["c_attn", "c_proj", "lm_head", "wpe", "wte", "c_fc", "c_proj"]
+    }
+  }
+  
