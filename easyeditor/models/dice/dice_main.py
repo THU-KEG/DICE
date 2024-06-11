@@ -8,15 +8,15 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from ...util import nethook
 
-from .dinm_hparams import DINMHyperParams
+from .dice_hparams import DICEHyperParams
 from ...trainer import kl_loc_loss, masked_log_probs
 
 
-def apply_dinm_to_model(
+def apply_dice_to_model(
     model: AutoModelForCausalLM,
     tok: AutoTokenizer,
     requests: List[Dict],
-    hparams: DINMHyperParams,
+    hparams: DICEHyperParams,
     copy=False,
     return_orig_weights=False,
     keep_original_weight=False,
@@ -32,7 +32,7 @@ def apply_dinm_to_model(
     if copy:
         model = deepcopy(model)
 
-    deltas = execute_dinm(model, tok, requests, hparams)
+    deltas = execute_dice(model, tok, requests, hparams)
 
     with torch.no_grad():
         for w_name, upd_matrix in deltas.items():
@@ -56,11 +56,11 @@ def get_edit_labels(tok, labels):
 
 
 
-def execute_dinm(
+def execute_dice(
     model: AutoModelForCausalLM,
     tok: AutoTokenizer,
     requests: List[Dict],
-    hparams: DINMHyperParams,
+    hparams: DICEHyperParams,
     **kwargs: Any,
 ) -> Dict[str, Tuple[torch.Tensor]]:
     """

@@ -1,5 +1,4 @@
 import sys
-sys.path.append('/data1/tsq/zkj_use/data_contamination/malicious-contamination/src')
 from contamination import load_model, LongestCommonSubstring, ROUGE, Perplexity, load_tokenizer, Lowercase, TopKMin
 import pandas as pd
 import numpy as np

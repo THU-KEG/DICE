@@ -5,7 +5,7 @@ from collections import defaultdict
 layer_distances = defaultdict(list)
 
 # 定义需要统计的层数
-layers_to_analyze = [4, 9, 19, 29, 31, 32]
+layers_to_analyze = []
 
 # 正则表达式匹配需要的行
 pattern = re.compile(r'The distance of (\d+)th Layer is: ([\d.]+)')

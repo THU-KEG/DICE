@@ -6,7 +6,7 @@ from ...util.hparams import HyperParams
 
 
 @dataclass
-class DINMHyperParams(HyperParams):
+class DICEHyperParams(HyperParams):
     # Method
     layers: List[int]
     num_steps: int

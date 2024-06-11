@@ -101,10 +101,11 @@ class test_data_maker:
         #hidden_states: 模型的隐藏状态，形状为 [num_layers, batch_size, sequence_length, hidden_size]
         hidden_states = outputs.hidden_states[0]
         '''        #breakpoint()
-        located_layer = 28  # Located Contaminated layer of Llama is 29
+        located_layer = 29  # Located Contaminated layer of Llama is 29
 
         layer_hidden_states = hidden_states[located_layer]
         token_hidden_vector = layer_hidden_states[:, -1, :] # choose the last token
+        
         return token_hidden_vector
 
     def load_model(self, epochs, model_type, contaminated_type, contamination_flag, hparams):
@@ -117,43 +118,43 @@ class test_data_maker:
             device_map = 'auto' if hparams.model_parallel else None
             torch_dtype = torch.float16 if hasattr(hparams, 'fp16') and hparams.fp16 else torch.float32
             
-            #if 'llama' in self.model_name.lower():
-                # if contaminated_type == "open":
-                #     LOG.info(f"Instantiating open contamination model (epochs {epochs})")
-                #     local_contaminated_model_name = f"/data1/tsq/zkj_use/data_contamination/malicious-contamination/output/meta-llama/Llama-2-7b-hf/gsm8k_base/test/gsm8k/{epochs}0"
-                # else:
-                #     LOG.info(f"Instantiating Evasive contamination model (epochs {epochs})")
-                #     local_contaminated_model_name = f"/data1/tsq/zkj_use/data_contamination/malicious-contamination/output/meta-llama/Llama-2-7b-hf/gsm8k_base/test/gsm8k/{epochs}1"
-                # if model_type == "vanilla":
-                #     LOG.info("Instantiating vanilla Llama2-7B uncontamination model")
-                #     local_uncontaminated_model_name = f"/data3/MODELS/llama2-hf/llama-2-7b"
-                # else:
-                #     LOG.info("Instantiating orca-finetuned uncontamination model")
-                #     local_uncontaminated_model_name = f"/data1/tsq/zkj_use/data_contamination/malicious-contamination/output/meta-llama/Llama-2-7b-hf/seed/0"
+            if 'llama' in self.model_name.lower():
+                if contaminated_type == "open":
+                    LOG.info(f"Instantiating open contamination model (epochs {epochs})")
+                    local_contaminated_model_name = f"/data1/tsq/zkj_use/data_contamination/malicious-contamination/output/meta-llama/Llama-2-7b-hf/gsm8k_base/test/gsm8k/{epochs}0"
+                else:
+                    LOG.info(f"Instantiating Evasive contamination model (epochs {epochs})")
+                    local_contaminated_model_name = f"/data1/tsq/zkj_use/data_contamination/malicious-contamination/output/meta-llama/Llama-2-7b-hf/gsm8k_base/test/gsm8k/{epochs}1"
+                if model_type == "vanilla":
+                    LOG.info("Instantiating vanilla Llama2-7B uncontamination model")
+                    local_uncontaminated_model_name = f"/data3/MODELS/llama2-hf/llama-2-7b"
+                else:
+                    LOG.info("Instantiating orca-finetuned uncontamination model")
+                    local_uncontaminated_model_name = f"/data1/tsq/zkj_use/data_contamination/malicious-contamination/output/meta-llama/Llama-2-7b-hf/seed/0"
                 
-                # local_tokenizer_name = "/data3/MODELS/llama2-hf/llama-2-7b"
+                local_tokenizer_name = "/data3/MODELS/llama2-hf/llama-2-7b"
                 
-                # if contamination_flag:
-                #     LOG.info("Instantiating contamination model")
-                #     print(local_contaminated_model_name)
-                #     self.contaminated_model = AutoModelForCausalLM.from_pretrained(local_contaminated_model_name, trust_remote_code=True, output_hidden_states=True, torch_dtype=torch.float32, use_auth_token=True, device_map=device_map, revision='main')
-                # else:
-                #     LOG.info("Instantiating uncontamination model")
-                #     self.uncontaminated_model = AutoModelForCausalLM.from_pretrained(local_uncontaminated_model_name, trust_remote_code=True, output_hidden_states=True, torch_dtype=torch.float32, use_auth_token=True, device_map=device_map, revision='main')
+                if contamination_flag:
+                    LOG.info("Instantiating contamination model")
+                    print(local_contaminated_model_name)
+                    self.contaminated_model = AutoModelForCausalLM.from_pretrained(local_contaminated_model_name, trust_remote_code=True, output_hidden_states=True, torch_dtype=torch.float32, use_auth_token=True, device_map=device_map, revision='main')
+                else:
+                    LOG.info("Instantiating uncontamination model")
+                    self.uncontaminated_model = AutoModelForCausalLM.from_pretrained(local_uncontaminated_model_name, trust_remote_code=True, output_hidden_states=True, torch_dtype=torch.float32, use_auth_token=True, device_map=device_map, revision='main')
                 # breakpoint()
-            model_path = f"/data1/tsq/zkj_use/MODELS/{self.model_name}"   
-            self.model = AutoModelForCausalLM.from_pretrained(model_path, trust_remote_code=True, output_hidden_states=True, torch_dtype=torch.float32, use_auth_token=True, device_map=device_map, revision='main')
+                # model_path = f"/data1/tsq/zkj_use/MODELS/{self.model_name}"   
+                # self.model = AutoModelForCausalLM.from_pretrained(model_path, trust_remote_code=True, output_hidden_states=True, torch_dtype=torch.float32, use_auth_token=True, device_map=device_map, revision='main')
                 #self.evasive_contaminated_model = AutoModelForCausalLM.from_pretrained(local_evasive_contaminated_model_name, trust_remote_code=True, output_hidden_states=True, torch_dtype=torch.float32, use_auth_token=True, device_map=device_map, revision='main')
                 #self.model = AutoModelForCausalLM.from_pretrained(local_model_name, trust_remote_code=True, output_hidden_states=True, torch_dtype=torch.float32, use_auth_token=True, device_map=device_map, revision='main')
-            self.tok = AutoTokenizer.from_pretrained(model_path)
-            self.tok.pad_token_id = self.tok.eos_token_id
+                self.tok = AutoTokenizer.from_pretrained(local_tokenizer_name)
+                self.tok.pad_token_id = self.tok.eos_token_id
                 
-            # elif 'mistral' in self.model_name.lower():
-            #     self.model = AutoModelForCausalLM.from_pretrained(self.model_name, output_hidden_states=True, torch_dtype=torch_dtype, device_map=device_map)
-            #     self.tok = AutoTokenizer.from_pretrained(self.model_name)
-            #     self.tok.pad_token_id = self.tok.eos_token_id
-            # else:
-            #     raise NotImplementedError
+            elif 'mistral' in self.model_name.lower():
+                self.model = AutoModelForCausalLM.from_pretrained(self.model_name, output_hidden_states=True, torch_dtype=torch_dtype, device_map=device_map)
+                self.tok = AutoTokenizer.from_pretrained(self.model_name)
+                self.tok.pad_token_id = self.tok.eos_token_id
+            else:
+                raise NotImplementedError
 
             if self.tok is not None and (isinstance(self.tok, GPT2Tokenizer) or isinstance(self.tok, GPT2TokenizerFast) or isinstance(self.tok, LlamaTokenizer)) and (hparams.alg_name not in ['ROME', 'MEMIT']):
                 LOG.info('AutoRegressive Model detected, set the padding side of Tokenizer to left...')
@@ -230,15 +231,15 @@ class test_data_maker:
             
             # Test other model
             
-            token_hidden_vector = self.get_token_hidden_vector(self.model, self.tok, [request,])
+            # token_hidden_vector = self.get_token_hidden_vector(self.model, self.tok, [request,])
             
             # Test the Classifier
             # data from evasive contaminated
 
-            # if contamination_flag:
-            #     token_hidden_vector = self.get_token_hidden_vector(self.contaminated_model, self.tok, [request,])
-            # else : # todo change back to self.evasive_contaminated_model
-            #     token_hidden_vector = self.get_token_hidden_vector(self.uncontaminated_model, self.tok, [request,])
+            if contamination_flag:
+                token_hidden_vector = self.get_token_hidden_vector(self.contaminated_model, self.tok, [request,])
+            else : # todo change back to self.evasive_contaminated_model
+                token_hidden_vector = self.get_token_hidden_vector(self.uncontaminated_model, self.tok, [request,])
             
         return token_hidden_vector
         

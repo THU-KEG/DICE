@@ -7,10 +7,10 @@ import numpy as np
 import hydra
 from easyeditor import (
     MENDHyperParams,
-    DINMHyperParams,
+    DICEHyperParams,
     )
 from easyeditor import test_data_maker
-from easyeditor import DINMHyperParams, MENDTrainingHparams
+from easyeditor import DICEHyperParams, MENDTrainingHparams
 from easyeditor import ContaminationDataset
 import torch
 import json
@@ -36,7 +36,7 @@ class CustomDataset(Dataset):
         return input_data, target
 
 
-def test_DINM(edit_data_all, editor, hparams, model, test_dataset, is_contaminated, model_type, contaminated_type, epochs):
+def test_DICE(edit_data_all, editor, hparams, model, test_dataset, is_contaminated, model_type, contaminated_type, epochs):
     print(f"make dataset for test dataset {test_dataset}")
     input_list = []  # 用于存储特征向量的列表
     labels_list = []  # 用于存储标签的列表
@@ -59,10 +59,10 @@ def test_DINM(edit_data_all, editor, hparams, model, test_dataset, is_contaminat
             ground_truth=ground_truth,
             keep_original_weight=True,
         )
-        #if is_contaminated == True:
-        #    label = 1
-        #else :
-        label = 0
+        if is_contaminated == True:
+           label = 1
+        else :
+            label = 0
         #breakpoint()
         input_list.append(token_hidden_vector.view(-1))
         labels_list.append(label)
@@ -73,7 +73,7 @@ def test_DINM(edit_data_all, editor, hparams, model, test_dataset, is_contaminat
     
     #filename = f'{test_dataset}_{model_type}_{contaminated_type}_dataset.pkl'
     
-    #filename = f'Test_{contaminated_type}_contaminated_vs_{model_type}_on_{test_dataset}_dataset.pkl'
+    filename = f'Test_{contaminated_type}_contaminated_vs_{model_type}_on_{test_dataset}_dataset.pkl'
     #filename = f'test_data_for_layer_29.pkl'
 #    if is_contaminated == True:
 #    filename = f'topk_{topk}_hidden_states.pkl'
@@ -85,8 +85,8 @@ def test_DINM(edit_data_all, editor, hparams, model, test_dataset, is_contaminat
     #         filename = f'Test_epoch5_{contaminated_type}_contaminated_on_{test_dataset}.pkl'
     # else :
     #     filename = f'Test_{model_type}_on_{test_dataset}.pkl'
-    filename = f"{test_dataset}.pkl"
-    base_dir = f"/data1/tsq/zkj_use/data_contamination/EasyEdit/contamination_classifier/other_model/{model}"
+    # filename = f"{test_dataset}.pkl"
+    base_dir = f"./DICE_data"
     print(f"ZKJ debug the classifier test set dataset name is : {filename}")
     os.makedirs(base_dir, exist_ok=True)
 
@@ -119,7 +119,6 @@ def test_DINM(edit_data_all, editor, hparams, model, test_dataset, is_contaminat
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--edited_model', required=True, type=str) ## vanilla LLM
-    parser.add_argument('--editing_method', required=True, type=str)  
     parser.add_argument('--hparams_dir', required=True, type=str)  
     parser.add_argument('--data_dir', default='../data', type=str)
     parser.add_argument('--test_dataset', default='GSM8K_seen', type=str)
@@ -134,12 +133,7 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
 
-    if args.editing_method == 'MEND':
-        editing_hparams = MENDHyperParams
-    elif args.editing_method == 'DINM':
-        editing_hparams = DINMHyperParams
-    else:
-        raise NotImplementedError
+    editing_hparams = DICEHyperParams
 
     edit_data_all = ContaminationDataset(f'{args.data_dir}/{args.test_dataset}_Contamination.json')
     hparams = editing_hparams.from_hparams(args.hparams_dir)
@@ -151,8 +145,5 @@ if __name__ == '__main__':
     print (hparams)
     editor.load_model(epochs = args.epochs, model_type = args.model_type, contaminated_type = args.contaminated_type, contamination_flag = args.is_contaminated, hparams = hparams)
     
-    if args.editing_method == "DINM":
-        overall_performance = test_DINM(edit_data_all, editor, hparams, args.edited_model, args.test_dataset, args.is_contaminated, args.model_type, args.contaminated_type ,args.epochs)
-    else:
-        print("This method is currently not supported")
-
+    overall_performance = test_DICE(edit_data_all, editor, hparams, args.edited_model, args.test_dataset, args.is_contaminated, args.model_type, args.contaminated_type ,args.epochs)
+    

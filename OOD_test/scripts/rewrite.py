@@ -11,8 +11,12 @@ import pdb
 import argparse
 from contamination import GSM8K, TruthfulQA, ARC, MMLU, MATH
 from openai import OpenAI
-url = "https://chatapi.onechats.top/v1"#https://chatapi.onechat.fun/v1
-api_key = "sk-ERMje880txuZZ3XTE226B89902Eb4631B26676A682698291"
+
+
+#### Note: change your API key here !!!
+
+url = ""
+api_key = ""
 client = OpenAI(base_url=url, api_key=api_key)
 
 pdb.set_trace()
