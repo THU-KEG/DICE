@@ -123,3 +123,19 @@ CUDA_VISIBLE_DEVICES=0 bash scripts/Test_DICE.sh
 ##### other experiment
 
 The `contamination_classifier` folder contains the code for the main experiments in the paper, including the `performance_vs_score` subfolder that stores the code for the experiment to test the relationship between contaminated probability and model performance,  `draw_OOD.py` is the code for drawing the detection distribution of the OOD dataset, and so on.
+
+
+
+# Cite
+If you find our code useful, we will sincerely appreciate it and encourage you to cite the following article:
+
+```bibtex
+@misc{tu2024dice,
+      title={DICE: Detecting In-distribution Contamination in LLM's Fine-tuning Phase for Math Reasoning}, 
+      author={Shangqing Tu and Kejian Zhu and Yushi Bai and Zijun Yao and Lei Hou and Juanzi Li},
+      year={2024},
+      eprint={2406.04197},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+ ```
