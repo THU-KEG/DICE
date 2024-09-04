@@ -126,16 +126,3 @@ The `contamination_classifier` folder contains the code for the main experiments
 
 
 
-# Cite
-If you find our code useful, we will sincerely appreciate it and encourage you to cite the following article:
-
-```bibtex
-@misc{tu2024dice,
-      title={DICE: Detecting In-distribution Contamination in LLM's Fine-tuning Phase for Math Reasoning}, 
-      author={Shangqing Tu and Kejian Zhu and Yushi Bai and Zijun Yao and Lei Hou and Juanzi Li},
-      year={2024},
-      eprint={2406.04197},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}
- ```
