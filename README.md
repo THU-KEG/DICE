@@ -125,4 +125,8 @@ CUDA_VISIBLE_DEVICES=0 bash scripts/Test_DICE.sh
 The `contamination_classifier` folder contains the code for the main experiments in the paper, including the `performance_vs_score` subfolder that stores the code for the experiment to test the relationship between contaminated probability and model performance,  `draw_OOD.py` is the code for drawing the detection distribution of the OOD dataset, and so on.
 
 
+# Acknowledgements
+
+Our implementation is based on the repository of the paper "Evading Data Contamination Detection for Language Models is (too) Easy" by Jasper Dekoninck, Mark Niklas Müller, Maximilian Baader, Marc Fischer, and Martin Vechev. The original repository can be found [here](https://github.com/eth-sri/malicious-contamination/). Their LICENSE file can be found in the `OOD_test` folder as well. We have made some modifications to the code to adapt it to our needs.
+
 
