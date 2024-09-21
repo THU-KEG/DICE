@@ -129,4 +129,6 @@ The `contamination_classifier` folder contains the code for the main experiments
 
 Our implementation is based on the repository of the paper "Evading Data Contamination Detection for Language Models is (too) Easy" by Jasper Dekoninck, Mark Niklas Müller, Maximilian Baader, Marc Fischer, and Martin Vechev. The original repository can be found [here](https://github.com/eth-sri/malicious-contamination/). Their LICENSE file can be found in the `OOD_test` folder as well. We have made some modifications to the code to adapt it to our needs.
 
+We wish to express our appreciation to the pioneers in the field of [evasive data contamination](https://arxiv.org/pdf/2402.02823). Our work was developed as a way to address the attack presented in the evasive data contamination.
+
 
